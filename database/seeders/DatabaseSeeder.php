@@ -106,18 +106,18 @@ class DatabaseSeeder extends Seeder
         );
 
         $cbcParameters = [
-            ['name' => 'WBC', 'unit' => '10^3/µl', 'normal_range_text' => '4.0-10.0', 'sort_order' => 1],
-            ['name' => 'Lymphocytes(Lym%)', 'unit' => '%', 'normal_range_text' => '20.0 - 40.0', 'sort_order' => 2],
-            ['name' => 'Monocytes(Mid%)', 'unit' => '%', 'normal_range_text' => '3.0-14.0', 'sort_order' => 3],
-            ['name' => 'Neutrophils(Gran%)', 'unit' => '%', 'normal_range_text' => '50.0 - 70.0', 'sort_order' => 4],
-            ['name' => 'Eosinophils(Gran#)', 'unit' => '10^3/µl', 'normal_range_text' => '2.00-7.00', 'sort_order' => 5],
-            ['name' => 'RBC', 'unit' => '10^6/µl', 'normal_range_text' => '4.00-5.50', 'sort_order' => 6],
-            ['name' => 'HGB (Hemoglobin)', 'unit' => 'g/dl', 'normal_range_text' => '11.9-15.9', 'sort_order' => 7],
-            ['name' => 'MCHC', 'unit' => 'g/dl', 'normal_range_text' => '32.0-36.0', 'sort_order' => 8],
-            ['name' => 'MCH', 'unit' => 'pg', 'normal_range_text' => '27.0-34.0', 'sort_order' => 9],
-            ['name' => 'MCV', 'unit' => 'fl', 'normal_range_text' => '80.0-100.0', 'sort_order' => 10],
-            ['name' => 'HCT', 'unit' => '%', 'normal_range_text' => '40.0-54.0', 'sort_order' => 11],
-            ['name' => 'PLT(Platelet Count)', 'unit' => '10^3/µl', 'normal_range_text' => '150.0-450.0', 'sort_order' => 12],
+            ['name' => 'WBC', 'unit' => '10^3/µl', 'normal_range_text' => '4.0-10.0', 'male_range' => '4.0-11.0', 'female_range' => '4.0-10.0', 'sort_order' => 1],
+            ['name' => 'Lymphocytes(Lym%)', 'unit' => '%', 'normal_range_text' => '20.0 - 40.0', 'male_range' => '20.0 - 40.0', 'female_range' => '20.0 - 40.0', 'sort_order' => 2],
+            ['name' => 'Monocytes(Mid%)', 'unit' => '%', 'normal_range_text' => '3.0-14.0', 'male_range' => '3.0-14.0', 'female_range' => '3.0-14.0', 'sort_order' => 3],
+            ['name' => 'Neutrophils(Gran%)', 'unit' => '%', 'normal_range_text' => '50.0 - 70.0', 'male_range' => '50.0 - 70.0', 'female_range' => '50.0 - 70.0', 'sort_order' => 4],
+            ['name' => 'Eosinophils(Gran#)', 'unit' => '10^3/µl', 'normal_range_text' => '2.00-7.00', 'male_range' => '2.00-7.00', 'female_range' => '2.00-7.00', 'sort_order' => 5],
+            ['name' => 'RBC', 'unit' => '10^6/µl', 'normal_range_text' => '4.00-5.50', 'male_range' => '4.50-5.90', 'female_range' => '4.00-5.20', 'sort_order' => 6],
+            ['name' => 'HGB (Hemoglobin)', 'unit' => 'g/dl', 'normal_range_text' => '12.0-17.5', 'male_range' => '13.5-17.5', 'female_range' => '12.0-15.5', 'sort_order' => 7],
+            ['name' => 'MCHC', 'unit' => 'g/dl', 'normal_range_text' => '32.0-36.0', 'male_range' => '32.0-36.0', 'female_range' => '32.0-36.0', 'sort_order' => 8],
+            ['name' => 'MCH', 'unit' => 'pg', 'normal_range_text' => '27.0-34.0', 'male_range' => '27.0-34.0', 'female_range' => '27.0-34.0', 'sort_order' => 9],
+            ['name' => 'MCV', 'unit' => 'fl', 'normal_range_text' => '80.0-100.0', 'male_range' => '80.0-100.0', 'female_range' => '80.0-100.0', 'sort_order' => 10],
+            ['name' => 'HCT', 'unit' => '%', 'normal_range_text' => '36.0-53.0', 'male_range' => '41.0-53.0', 'female_range' => '36.0-46.0', 'sort_order' => 11],
+            ['name' => 'PLT(Platelet Count)', 'unit' => '10^3/µl', 'normal_range_text' => '150.0-450.0', 'male_range' => '150.0-450.0', 'female_range' => '150.0-450.0', 'sort_order' => 12],
         ];
 
         foreach ($cbcParameters as $p) {

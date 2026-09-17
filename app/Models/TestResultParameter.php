@@ -14,6 +14,8 @@ class TestResultParameter extends Model
         'parameter_name',
         'unit',
         'normal_range_text',
+        'male_range',
+        'female_range',
         'result_value',
         'sort_order',
     ];
