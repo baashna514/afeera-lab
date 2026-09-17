@@ -17,18 +17,7 @@ class DatabaseSeeder extends Seeder
     {
         // Create SaaS Owner (Single Owner)
         User::updateOrCreate(
-            ['email' => 'owner@medilab.com'],
-            [
-                'name' => 'SaaS System Owner',
-                'password' => Hash::make('password'),
-                'role' => 'owner',
-                'company_id' => null,
-                'phone' => '+92 300 0000000',
-                'is_active' => true,
-            ]
-        );
-        User::updateOrCreate(
-            ['email' => 'owner@labsaas.com'],
+            ['email' => 'owner@gmail.com'],
             [
                 'name' => 'SaaS System Owner',
                 'password' => Hash::make('password'),
@@ -41,18 +30,18 @@ class DatabaseSeeder extends Seeder
 
         // Create Demo Company 1
         $company = Company::updateOrCreate(
-            ['email' => 'info@citypathology.com'],
+            ['email' => 'info@baashna.com'],
             [
-                'name' => 'Siyal Surgical Hospital & Labs',
+                'name' => 'Siyaal Surgical Hospital & Labs',
                 'phone' => '+92 301 0417383',
-                'address' => 'near NRSP Bank, FatehPur Road Karor Lal Esan',
+                'address' => 'Near NRSP Bank, FatehPur Road Karor Lal Esan',
                 'status' => 'active',
             ]
         );
 
         // Create Company Super Admin
         User::updateOrCreate(
-            ['email' => 'admin@citypathology.com'],
+            ['email' => 'superadmin@gmail.com'],
             [
                 'company_id' => $company->id,
                 'name' => 'Dr. Naeem Abbas Siyal',
@@ -65,31 +54,6 @@ class DatabaseSeeder extends Seeder
 
         // Seed Real Hospital Tests for Company 1
         $this->seedTestsForCompany($company->id);
-
-        // Create Second Demo Company
-        $company2 = Company::updateOrCreate(
-            ['email' => 'contact@apexlabs.com'],
-            [
-                'name' => 'Apex Labs & Diagnostics',
-                'phone' => '+92 51 5432100',
-                'address' => '45 Healthcare Boulevard, Islamabad',
-                'status' => 'active',
-            ]
-        );
-
-        User::updateOrCreate(
-            ['email' => 'admin@apexlabs.com'],
-            [
-                'company_id' => $company2->id,
-                'name' => 'Ayesha Khan',
-                'password' => Hash::make('password'),
-                'role' => 'super_admin',
-                'phone' => '+92 321 1122334',
-                'is_active' => true,
-            ]
-        );
-
-        $this->seedTestsForCompany($company2->id);
     }
 
     private function seedTestsForCompany(int $companyId): void

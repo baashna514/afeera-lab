@@ -10,9 +10,9 @@ return new class extends Migration
     {
         Schema::create('test_booking_items', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('company_id')->constrained('companies')->cascadeOnDelete();
-            $table->foreignId('test_booking_id')->constrained('test_bookings')->cascadeOnDelete();
-            $table->foreignId('lab_test_id')->constrained('lab_tests')->cascadeOnDelete();
+            $table->bigInteger('company_id');
+            $table->bigInteger('test_booking_id');
+            $table->bigInteger('lab_test_id');
             $table->decimal('price', 10, 2)->default(0);
             $table->timestamps();
         });
