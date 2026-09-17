@@ -19,6 +19,8 @@ class LabTestParameter extends Model
         'min_range',
         'max_range',
         'normal_range_text',
+        'male_range',
+        'female_range',
         'method',
         'default_value',
         'sort_order',

@@ -74,4 +74,51 @@ class PatientBookingTest extends TestCase
             'normal_range_text' => '4.0 - 10.0',
         ]);
     }
+
+    public function test_booking_applies_gender_specific_normal_ranges_based_on_patient_gender()
+    {
+        $company = Company::factory()->create();
+        $admin = User::factory()->create(['company_id' => $company->id, 'role' => 'super_admin']);
+
+        $test = LabTest::create([
+            'company_id' => $company->id,
+            'category' => 'Hematology',
+            'name' => 'Hemoglobin Test',
+            'price' => 500,
+        ]);
+
+        $param = LabTestParameter::create([
+            'company_id' => $company->id,
+            'lab_test_id' => $test->id,
+            'name' => 'HGB',
+            'unit' => 'g/dl',
+            'normal_range_text' => '12.0 - 17.5',
+            'male_range' => '13.5 - 17.5',
+            'female_range' => '12.0 - 15.5',
+        ]);
+
+        // 1. Male Patient Booking
+        $this->actingAs($admin)->post(route('admin.bookings.store'), [
+            'patient_name' => 'Ali Khan',
+            'patient_gender' => 'male',
+            'test_ids' => [$test->id],
+        ]);
+
+        $this->assertDatabaseHas('test_result_parameters', [
+            'parameter_name' => 'HGB',
+            'normal_range_text' => '13.5 - 17.5', // Automatically uses Male range
+        ]);
+
+        // 2. Female Patient Booking
+        $this->actingAs($admin)->post(route('admin.bookings.store'), [
+            'patient_name' => 'Fatima Bibi',
+            'patient_gender' => 'female',
+            'test_ids' => [$test->id],
+        ]);
+
+        $this->assertDatabaseHas('test_result_parameters', [
+            'parameter_name' => 'HGB',
+            'normal_range_text' => '12.0 - 15.5', // Automatically uses Female range
+        ]);
+    }
 }

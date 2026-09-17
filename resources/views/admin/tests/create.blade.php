@@ -133,9 +133,9 @@
                                 </button>
                             </div>
 
-                            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3">
+                            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 mb-3">
                                 <!-- Parameter Name -->
-                                <div class="lg:col-span-2">
+                                <div>
                                     <label class="block text-[11px] font-semibold text-slate-600 uppercase mb-1">Sub-Test Name <span class="text-rose-500">*</span></label>
                                     <input type="text" :name="'parameters['+index+'][name]'" x-model="param.name" required 
                                            placeholder="e.g. Hemoglobin (HGB) or WBC" 
@@ -150,20 +150,45 @@
                                            class="w-full px-3 py-2 bg-white border border-slate-200 rounded-lg text-sm text-slate-800 focus:ring-2 focus:ring-blue-500 focus:outline-none">
                                 </div>
 
-                                <!-- Normal Range Text (Optional) -->
-                                <div>
-                                    <label class="block text-[11px] font-semibold text-slate-600 uppercase mb-1">Normal Range <span class="text-slate-400 font-normal">(Optional)</span></label>
-                                    <input type="text" :name="'parameters['+index+'][normal_range_text]'" x-model="param.normal_range_text" 
-                                           placeholder="e.g. 11.9-15.9 or 4.0-10.0" 
-                                           class="w-full px-3 py-2 bg-white border border-slate-200 rounded-lg text-sm text-slate-800 focus:ring-2 focus:ring-blue-500 focus:outline-none">
-                                </div>
-
                                 <!-- Test Method (Optional) -->
                                 <div>
                                     <label class="block text-[11px] font-semibold text-slate-600 uppercase mb-1">Method <span class="text-slate-400 font-normal">(Optional)</span></label>
                                     <input type="text" :name="'parameters['+index+'][method]'" x-model="param.method" 
-                                           placeholder="e.g. By Rapid Method" 
+                                           placeholder="e.g. By Rapid Method, Automated" 
                                            class="w-full px-3 py-2 bg-white border border-slate-200 rounded-lg text-sm text-slate-800 focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                                </div>
+                            </div>
+
+                            <!-- Range Row: General, Male, Female -->
+                            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2 border-t border-slate-200/60">
+                                <!-- General Normal Range -->
+                                <div>
+                                    <label class="block text-[11px] font-semibold text-slate-600 uppercase mb-1">
+                                        <i class="fa-solid fa-users text-slate-400 mr-1"></i> General Normal Range
+                                    </label>
+                                    <input type="text" :name="'parameters['+index+'][normal_range_text]'" x-model="param.normal_range_text" 
+                                           placeholder="e.g. 11.9-15.9 or 4.0-10.0" 
+                                           class="w-full px-3 py-1.5 bg-white border border-slate-200 rounded-lg text-xs text-slate-800 focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                                </div>
+
+                                <!-- Male Normal Range -->
+                                <div>
+                                    <label class="block text-[11px] font-semibold text-blue-700 uppercase mb-1">
+                                        <i class="fa-solid fa-mars text-blue-500 mr-1"></i> Male Range (Optional)
+                                    </label>
+                                    <input type="text" :name="'parameters['+index+'][male_range]'" x-model="param.male_range" 
+                                           placeholder="e.g. 13.5-17.5" 
+                                           class="w-full px-3 py-1.5 bg-blue-50/40 border border-blue-200 rounded-lg text-xs text-slate-800 focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                                </div>
+
+                                <!-- Female Normal Range -->
+                                <div>
+                                    <label class="block text-[11px] font-semibold text-pink-700 uppercase mb-1">
+                                        <i class="fa-solid fa-venus text-pink-500 mr-1"></i> Female Range (Optional)
+                                    </label>
+                                    <input type="text" :name="'parameters['+index+'][female_range]'" x-model="param.female_range" 
+                                           placeholder="e.g. 12.0-15.5" 
+                                           class="w-full px-3 py-1.5 bg-pink-50/40 border border-pink-200 rounded-lg text-xs text-slate-800 focus:ring-2 focus:ring-pink-500 focus:outline-none">
                                 </div>
                             </div>
                         </div>
@@ -240,13 +265,13 @@
         function testForm() {
             return {
                 parameters: [
-                    { name: 'WBC', unit: '10^3/µl', normal_range_text: '4.0-10.0', method: '' },
-                    { name: 'RBC', unit: '10^6/µl', normal_range_text: '4.00-5.50', method: '' },
-                    { name: 'HGB (Hemoglobin)', unit: 'g/dl', normal_range_text: '11.9-15.9', method: '' }
+                    { name: 'WBC', unit: '10^3/µl', normal_range_text: '4.0-10.0', male_range: '4.0-10.0', female_range: '4.0-10.0', method: 'Automated Cell Counter' },
+                    { name: 'RBC', unit: '10^6/µl', normal_range_text: '4.00-5.50', male_range: '4.50-5.50', female_range: '4.00-5.00', method: 'Automated Cell Counter' },
+                    { name: 'HGB (Hemoglobin)', unit: 'g/dl', normal_range_text: '12.0-17.5', male_range: '13.5-17.5', female_range: '12.0-15.5', method: 'Automated Cell Counter' }
                 ],
                 notes: [],
                 addParameter() {
-                    this.parameters.push({ name: '', unit: '', normal_range_text: '', method: '' });
+                    this.parameters.push({ name: '', unit: '', normal_range_text: '', male_range: '', female_range: '', method: '' });
                 },
                 removeParameter(index) {
                     this.parameters.splice(index, 1);

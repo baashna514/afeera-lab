@@ -101,12 +101,23 @@ class BookingController extends Controller
                     'status' => 'pending',
                 ]);
 
+                $patientGender = strtolower($patient->gender ?? '');
+
                 foreach ($test->parameters as $param) {
+                    $assignedRange = $param->normal_range_text;
+                    if ($patientGender === 'male' && ! empty($param->male_range)) {
+                        $assignedRange = $param->male_range;
+                    } elseif ($patientGender === 'female' && ! empty($param->female_range)) {
+                        $assignedRange = $param->female_range;
+                    }
+
                     TestResultParameter::create([
                         'test_result_id' => $result->id,
                         'parameter_name' => $param->name,
                         'unit' => $param->unit,
-                        'normal_range_text' => $param->normal_range_text,
+                        'normal_range_text' => $assignedRange,
+                        'male_range' => $param->male_range,
+                        'female_range' => $param->female_range,
                         'sort_order' => $param->sort_order,
                         'result_value' => $param->default_value,
                     ]);

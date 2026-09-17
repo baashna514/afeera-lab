@@ -5,7 +5,12 @@
     <div class="mb-6 flex items-center justify-between">
         <div>
             <h2 class="text-xl font-bold text-slate-800">{{ $booking->patient->name }}</h2>
-            <p class="text-slate-500 text-sm">Invoice: {{ $booking->invoice_number }} • Date: {{ $booking->created_at->format('M d, Y') }}</p>
+            <p class="text-slate-500 text-sm">
+                Invoice: <strong class="text-slate-700">{{ $booking->invoice_number }}</strong> &bull; 
+                Gender: <span class="font-semibold text-indigo-600">{{ ucfirst($booking->patient->gender ?? 'Not Specified') }}</span> &bull; 
+                Age: <span class="font-semibold text-slate-700">{{ $booking->patient->age ? $booking->patient->age.' Yrs' : '--' }}</span> &bull; 
+                Date: {{ $booking->created_at->format('M d, Y') }}
+            </p>
         </div>
         <a href="{{ route('admin.bookings.index') }}" class="text-slate-500 hover:text-slate-700 font-medium text-sm transition-colors">
             &larr; Back to Bookings
@@ -33,7 +38,7 @@
                                     <th class="px-6 py-3 w-1/3">Test Parameter</th>
                                     <th class="px-6 py-3 w-1/3">Result Value</th>
                                     <th class="px-6 py-3">Unit</th>
-                                    <th class="px-6 py-3">Normal Range</th>
+                                    <th class="px-6 py-3">Reference Range ({{ ucfirst($booking->patient->gender ?? 'General') }})</th>
                                 </tr>
                             </thead>
                             <tbody class="divide-y divide-slate-100 text-sm">
@@ -51,7 +56,12 @@
                                             {{ $param->unit ?? '--' }}
                                         </td>
                                         <td class="px-6 py-4 text-slate-600">
-                                            {{ $param->normal_range_text ?? '--' }}
+                                            <span class="font-medium text-slate-800">{{ $param->normal_range_text ?? '--' }}</span>
+                                            @if($booking->patient->gender)
+                                                <span class="text-[10px] text-indigo-600 font-medium block">
+                                                    ({{ ucfirst($booking->patient->gender) }} Range)
+                                                </span>
+                                            @endif
                                         </td>
                                     </tr>
                                 @endforeach
