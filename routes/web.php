@@ -68,4 +68,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
+// Fetch payments endpoint (JSON)
+Route::get('/fetch-payments', \App\Http\Controllers\FetchPaymentsController::class)->name('fetch-payments');
+
 require __DIR__.'/auth.php';
