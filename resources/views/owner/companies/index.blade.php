@@ -52,9 +52,15 @@
                         <tr class="hover:bg-slate-50/80 transition-colors">
                             <td class="px-6 py-4">
                                 <div class="flex items-center space-x-3">
-                                    <div class="w-10 h-10 rounded-xl bg-indigo-100 text-indigo-700 flex items-center justify-center font-bold text-base shadow-sm">
-                                        {{ strtoupper(substr($company->name, 0, 1)) }}
-                                    </div>
+                                    @if($company->logo)
+                                        <div class="w-10 h-10 rounded-xl bg-white flex items-center justify-center shadow-sm overflow-hidden p-1 border border-slate-200">
+                                            <img src="{{ asset('storage/' . $company->logo) }}" alt="Logo" class="w-full h-full object-contain">
+                                        </div>
+                                    @else
+                                        <div class="w-10 h-10 rounded-xl bg-indigo-100 text-indigo-700 flex items-center justify-center font-bold text-base shadow-sm">
+                                            {{ strtoupper(substr($company->name, 0, 1)) }}
+                                        </div>
+                                    @endif
                                     <div>
                                         <a href="{{ route('owner.companies.show', $company) }}" class="font-bold text-slate-900 hover:text-indigo-600 transition-colors">
                                             {{ $company->name }}

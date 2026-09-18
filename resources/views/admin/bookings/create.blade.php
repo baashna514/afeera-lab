@@ -172,8 +172,13 @@
                 },
                 
                 updateTotals() {
-                    // Update paid amount automatically to match total if they want to fast-track
                     this.paidAmount = this.total;
+                },
+
+                init() {
+                    this.$watch('discount', (value) => {
+                        this.updateTotals();
+                    });
                 }
             }));
         });

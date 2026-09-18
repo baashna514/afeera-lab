@@ -62,209 +62,195 @@
             font-weight: 600;
             border-radius: 8px;
             text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
         }
-
-        /* Hospital Header */
+        /* Header */
         .lab-header {
-            border-bottom: 2px solid #0f172a;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            border-bottom: 3px solid #1e3a8a;
             padding-bottom: 12px;
-            margin-bottom: 16px;
+            margin-bottom: 12px;
+        }
+        .lab-branding {
             display: flex;
             align-items: center;
-            justify-content: space-between;
+            gap: 12px;
+        }
+        .lab-branding img {
+            width: 70px;
+            height: 70px;
+            object-fit: contain;
         }
         .lab-branding h1 {
             font-size: 22px;
             font-weight: 900;
-            text-transform: uppercase;
-            letter-spacing: -0.5px;
-            color: #0f172a;
+            color: #1e3a8a;
+            margin-bottom: 2px;
         }
         .lab-branding p {
             font-size: 11px;
             color: #475569;
-            margin-top: 2px;
+            line-height: 1.4;
         }
-        .lab-badge {
+        .lab-report-info {
             text-align: right;
-            font-size: 11px;
-            font-weight: 700;
-            color: #4f46e5;
-            background: #eef2ff;
-            padding: 6px 12px;
-            border-radius: 6px;
-            border: 1px solid #c7d2fe;
         }
-
-        /* Patient Information Box */
+        .lab-report-info table {
+            width: auto;
+            margin-left: auto;
+        }
+        .lab-report-info td {
+            font-size: 11px;
+            padding: 1px 4px;
+            color: #334155;
+        }
+        .lab-report-info .lbl {
+            font-weight: 700;
+            color: #1e3a8a;
+            text-align: right;
+            padding-right: 6px;
+        }
+        /* Patient Box */
         .patient-box {
-            border: 1px solid #cbd5e1;
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
             border-radius: 6px;
             padding: 10px 14px;
-            margin-bottom: 20px;
-            display: grid;
-            grid-template-cols: repeat(4, 1fr);
-            gap: 10px;
-            background: #f8fafc;
-        }
-        .info-item {
-            font-size: 11px;
-        }
-        .info-label {
-            font-size: 10px;
-            font-weight: 700;
-            text-transform: uppercase;
-            color: #64748b;
-        }
-        .info-val {
-            font-weight: 800;
-            color: #0f172a;
-            margin-top: 1px;
-        }
-
-        /* Test Section */
-        .test-heading {
-            background: #0f172a;
-            color: #fff;
-            padding: 6px 10px;
-            font-size: 13px;
-            font-weight: 800;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            border-radius: 4px 4px 0 0;
+            margin-bottom: 14px;
             display: flex;
             justify-content: space-between;
-            align-items: center;
-            margin-top: 14px;
         }
-        .test-heading .category-tag {
-            font-size: 10px;
-            background: rgba(255,255,255,0.2);
+        .patient-box table {
+            width: auto;
+        }
+        .patient-box td {
+            font-size: 11px;
             padding: 2px 6px;
-            border-radius: 3px;
+            color: #334155;
         }
+        .patient-box .lbl {
+            font-weight: 700;
+            color: #1e3a8a;
+        }
+        /* Test Section */
+        .test-heading {
+            background: #eef2ff;
+            border-left: 4px solid #1e3a8a;
+            padding: 8px 12px;
+            margin: 14px 0 8px 0;
+            font-size: 12px;
+            font-weight: 700;
+            color: #3730a3;
+            text-transform: uppercase;
+        }
+        /* Results Table */
         .results-table {
             width: 100%;
             border-collapse: collapse;
-            font-size: 11px;
-            margin-bottom: 12px;
-            border: 1px solid #e2e8f0;
-            border-top: none;
+            margin-bottom: 10px;
         }
         .results-table th {
-            background: #f1f5f9;
-            padding: 6px 10px;
-            font-weight: 800;
-            text-transform: uppercase;
+            background: #1e3a8a;
+            color: #fff;
             font-size: 10px;
-            color: #334155;
-            border-bottom: 1px solid #cbd5e1;
+            font-weight: 700;
+            text-transform: uppercase;
+            padding: 7px 10px;
             text-align: left;
+            letter-spacing: 0.5px;
         }
         .results-table td {
             padding: 6px 10px;
+            font-size: 11px;
             border-bottom: 1px solid #e2e8f0;
-            color: #0f172a;
         }
-        .results-table tr:last-child td {
-            border-bottom: none;
+        .results-table tr:nth-child(even) {
+            background: #f8fafc;
         }
         .param-name {
-            font-weight: 700;
+            font-weight: 600;
+            color: #1e293b;
         }
         .result-val {
             font-weight: 800;
+            color: #0f172a;
             font-size: 12px;
-            color: #000;
         }
-        .unit, .range {
-            color: #475569;
-            font-size: 10.5px;
+        .unit { color: #64748b; }
+        .range { color: #475569; font-size: 10px; }
+        .flag-normal {
+            color: #16a34a;
+            font-weight: 700;
+            font-size: 10px;
         }
-
-        /* Custom Notes / Remarks */
+        .flag-high {
+            color: #dc2626;
+            font-weight: 800;
+            font-size: 10px;
+        }
+        .flag-low {
+            color: #ea580c;
+            font-weight: 800;
+            font-size: 10px;
+        }
+        /* Notes */
         .notes-card {
             background: #fffbeb;
-            border: 1px dashed #fcd34d;
-            border-radius: 6px;
+            border: 1px solid #fde68a;
+            border-radius: 4px;
             padding: 8px 12px;
-            margin-top: 8px;
             font-size: 10px;
             color: #78350f;
-            line-height: 1.4;
+            margin-bottom: 10px;
+            line-height: 1.5;
         }
-        .notes-card strong {
-            font-weight: 800;
-            text-transform: uppercase;
-            font-size: 9.5px;
-            display: block;
-            margin-bottom: 4px;
-        }
-
-        /* Signatures Footer */
+        /* Footer */
         .report-footer {
-            margin-top: 30px;
-            padding-top: 14px;
-            border-top: 1px solid #cbd5e1;
             display: flex;
             justify-content: space-between;
             align-items: flex-end;
+            margin-top: 24px;
+            padding-top: 12px;
+            border-top: 2px solid #1e3a8a;
         }
         .sign-col {
-            text-align: center;
-            width: 50mm;
+            font-size: 11px;
         }
-        .sign-line {
-            border-bottom: 1px solid #0f172a;
-            height: 25px;
-            margin-bottom: 6px;
+        .sign-col.right {
+            text-align: right;
         }
         .sign-title {
-            font-size: 10.5px;
             font-weight: 800;
-            color: #0f172a;
+            color: #1e3a8a;
+            font-size: 13px;
         }
         .sign-subtitle {
-            font-size: 9px;
-            color: #64748b;
-        }
-        .stamp-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 4px;
+            color: #475569;
             font-size: 10px;
-            color: #059669;
-            font-weight: 800;
-            background: #ecfdf5;
-            padding: 3px 8px;
-            border-radius: 4px;
-            border: 1px solid #a7f3d0;
-            margin-bottom: 6px;
+            line-height: 1.5;
         }
-
         @media print {
-            body {
-                background: none;
-                padding: 0;
-            }
-            .no-print-bar {
-                display: none;
-            }
+            body { padding: 0; background: #fff; }
+            .no-print-bar { display: none !important; }
             .report-page {
                 box-shadow: none;
-                border: none;
-                padding: 10mm;
+                margin: 0;
+                padding: 8mm 12mm;
                 width: 100%;
-                min-height: auto;
-            }
-            @page {
-                size: A4 portrait;
-                margin: 8mm;
+                min-height: 100vh;
+                border-radius: 0;
             }
         }
     </style>
 </head>
 <body>
+    @php
+        $setting = \App\Models\CompanySetting::where('company_id', $company->id)->first();
+    @endphp
 
     <div class="no-print-bar">
         <a href="{{ route('admin.reviews.show', $booking) }}" class="btn-back">&larr; Return to Review</a>
@@ -274,67 +260,69 @@
     <div class="report-page">
         <div>
             <!-- Hospital Header -->
+            @if(!$setting || $setting->show_header)
             <div class="lab-header">
                 <div class="lab-branding">
-                    <h1>{{ $company->name ?? 'Clinical Pathology Laboratory' }}</h1>
-                    <p>{{ $company->address ?? 'Main Road, Hospital Campus' }} &bull; Ph: {{ $company->phone ?? '0300-0000000' }}</p>
+                    @if($setting && $setting->company_logo)
+                        <img src="{{ asset('storage/' . $setting->company_logo) }}" alt="Logo">
+                    @endif
+                    <div>
+                        <h1>{{ $setting->company_name ?? $company->name ?? 'Clinical Pathology Laboratory' }}</h1>
+                        <p>{{ $setting->company_address ?? $company->address ?? 'Main Road, Hospital Campus' }}</p>
+                        <p>Phone: {{ $setting->company_phone ?? $company->phone ?? '0300-0000000' }} @if($setting && $setting->company_email) | Email: {{ $setting->company_email }} @endif</p>
+                    </div>
                 </div>
-                <div class="lab-badge">
-                    <i class="fa-solid fa-certificate mr-1"></i> ISO Verified LIMS Report
+                <div class="lab-report-info">
+                    <div style="font-size: 16px; font-weight: 900; margin-bottom: 6px; text-transform: uppercase; color:#0f172a;">Laboratory Report</div>
+                    <table>
+                        <tr><td class="lbl">Lab No.</td><td>: {{ $booking->invoice_number }}</td></tr>
+                        <tr><td class="lbl">Report Date</td><td>: {{ now()->format('d-M-Y h:i A') }}</td></tr>
+                        <tr><td class="lbl">Sample Collected</td><td>: {{ $booking->created_at->format('d-M-Y h:i A') }}</td></tr>
+                        <tr><td class="lbl">Report Status</td><td>: Final</td></tr>
+                    </table>
                 </div>
             </div>
+            @endif
 
             <!-- Patient Information Box -->
+            @if(!$setting || $setting->show_patient_info)
             <div class="patient-box">
-                <div class="info-item">
-                    <div class="info-label">Patient Name:</div>
-                    <div class="info-val">{{ $booking->patient->name }}</div>
+                <div>
+                    <table>
+                        <tr><td class="lbl">Patient Name</td><td>: <strong>{{ $booking->patient->name }}</strong></td></tr>
+                        <tr><td class="lbl">Age / Gender</td><td>: {{ $booking->patient->age ? $booking->patient->age.' Years' : '--' }} / {{ ucfirst($booking->patient->gender ?? 'N/A') }}</td></tr>
+                        <tr><td class="lbl">Patient ID</td><td>: PID-{{ str_pad($booking->patient->id, 6, '0', STR_PAD_LEFT) }}</td></tr>
+                        <tr><td class="lbl">Referred By</td><td>: Dr. Consultant Physician</td></tr>
+                        <tr><td class="lbl">Contact</td><td>: {{ $booking->patient->phone ?? '--' }}</td></tr>
+                    </table>
                 </div>
-                <div class="info-item">
-                    <div class="info-label">Age / Gender:</div>
-                    <div class="info-val">{{ $booking->patient->age ? $booking->patient->age.' Yrs' : '--' }} / {{ ucfirst($booking->patient->gender ?? 'N/A') }}</div>
-                </div>
-                <div class="info-item">
-                    <div class="info-label">Reg / Invoice #:</div>
-                    <div class="info-val">{{ $booking->invoice_number }}</div>
-                </div>
-                <div class="info-item">
-                    <div class="info-label">Booking Date:</div>
-                    <div class="info-val">{{ $booking->created_at->format('d/m/Y h:i A') }}</div>
-                </div>
-                <div class="info-item">
-                    <div class="info-label">Patient ID / MRN:</div>
-                    <div class="info-val">#P-{{ str_pad($booking->patient->id, 5, '0', STR_PAD_LEFT) }}</div>
-                </div>
-                <div class="info-item">
-                    <div class="info-label">Contact / Phone:</div>
-                    <div class="info-val">{{ $booking->patient->phone ?? '--' }}</div>
-                </div>
-                <div class="info-item">
-                    <div class="info-label">Referred By:</div>
-                    <div class="info-val">Consultant Physician</div>
-                </div>
-                <div class="info-item">
-                    <div class="info-label">Report Printed:</div>
-                    <div class="info-val">{{ now()->format('d/m/Y h:i A') }}</div>
+                <div>
+                    <table>
+                        <tr><td class="lbl">Collection Type</td><td>: Venous Blood</td></tr>
+                        <tr><td class="lbl">Fasting</td><td>: No</td></tr>
+                        <tr><td class="lbl">Clinical Info</td><td>: Routine Check-up</td></tr>
+                        <tr><td class="lbl">Barcode No</td><td>: {{ $booking->items->first()->barcode ?? '--' }}</td></tr>
+                    </table>
                 </div>
             </div>
+            @endif
 
             <!-- Test Results Table -->
             @foreach($booking->items as $item)
                 <div class="test-heading">
-                    <span>{{ $item->labTest->name }}</span>
-                    <span class="category-tag">{{ $item->labTest->category }}</span>
+                    {{ $item->labTest->category }}
+                    <div style="font-size: 16px; margin-top: 4px; font-weight: 900; color: #1e3a8a;">{{ $item->labTest->name }}</div>
                 </div>
 
                 @if($item->result && $item->result->parameters->count() > 0)
                     <table class="results-table">
                         <thead>
                             <tr>
-                                <th style="width: 35%;">Investigation / Parameter</th>
-                                <th style="width: 25%;">Observed Result</th>
+                                <th style="width: 35%;">Test Name</th>
+                                <th style="width: 20%;">Result</th>
                                 <th style="width: 15%;">Unit</th>
-                                <th style="width: 25%;">Biological Reference Interval</th>
+                                <th style="width: 20%;">Reference Range</th>
+                                <th style="width: 10%;">Flag</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -344,6 +332,7 @@
                                     <td class="result-val">{{ $param->result_value ?? '--' }}</td>
                                     <td class="unit">{{ $param->unit ?? '--' }}</td>
                                     <td class="range">{{ $param->normal_range_text ?? '--' }}</td>
+                                    <td class="flag-normal">Normal</td>
                                 </tr>
                             @endforeach
                         </tbody>
@@ -353,43 +342,49 @@
                 <!-- Dynamic Notes for this test if any -->
                 @if($item->labTest->notes->count() > 0)
                     <div class="notes-card">
-                        <strong>Test Notes / Clinical Method:</strong>
-                        <ul style="padding-left: 14px;">
-                            @foreach($item->labTest->notes as $note)
-                                <li>{{ $note->note_text }}</li>
-                            @endforeach
-                        </ul>
+                        <strong>Note:</strong> Results are to be correlated clinically.<br>
+                        @foreach($item->labTest->notes as $note)
+                            &bull; {{ $note->note_text }}<br>
+                        @endforeach
                     </div>
                 @endif
             @endforeach
+            
+            <div style="text-align: center; margin-top: 20px; font-size: 11px; font-style: italic; color: #475569;">* End of Report *</div>
         </div>
 
         <!-- Signatures & Verification Footer -->
+        @if(!$setting || $setting->show_footer)
         <div>
             <div class="report-footer">
-                <div class="sign-col">
-                    <div class="sign-line"></div>
-                    <div class="sign-title">Medical Lab Technologist</div>
-                    <div class="sign-subtitle">B.Sc. MLT, Registered</div>
+                <div class="sign-col" style="text-align: left; width: 120px;">
+                    <!-- QR Code Placeholder -->
+                    <img src="https://api.qrserver.com/v1/create-qr-code/?size=80x80&data={{ urlencode(route('admin.reviews.show', $booking)) }}" alt="QR Code" style="width: 60px; height: 60px;">
                 </div>
 
-                <div style="text-align: center;">
-                    <div class="stamp-badge">
-                        <i class="fa-solid fa-shield-check"></i> DIGITALLY VERIFIED
-                    </div>
-                    <p style="font-size: 8.5px; color: #64748b;">Electronically authenticated without physical signature</p>
-                </div>
-
-                <div class="sign-col">
-                    <div class="sign-line"></div>
-                    <div class="sign-title">Dr. Consultant Pathologist</div>
-                    <div class="sign-subtitle">M.B.B.S., M.Phil. / F.C.P.S. (Hematology)</div>
+                <div class="sign-col right">
+                    @if($setting && $setting->doctor_name)
+                        <!-- Signature placeholder image could go here -->
+                        <div style="height: 40px; margin-bottom: 5px;">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/f/f6/Signature_placeholder.svg" style="height: 40px; opacity: 0.6;" alt="Signature">
+                        </div>
+                        <div class="sign-title">{{ $setting->doctor_name }}</div>
+                        <div class="sign-subtitle">
+                            @if($setting->doctor_degree) {{ $setting->doctor_degree }} <br> @endif
+                            @if($setting->doctor_reg_no) {{ $setting->doctor_reg_no }} @endif
+                        </div>
+                    @else
+                        <div style="height: 40px; border-bottom: 1px solid #cbd5e1; margin-bottom: 5px; width: 150px; display: inline-block;"></div>
+                        <div class="sign-title">Authorized Signatory</div>
+                        <div class="sign-subtitle">Consultant Pathologist</div>
+                    @endif
                 </div>
             </div>
-            <p style="text-align: center; font-size: 8px; color: #94a3b8; margin-top: 8px;">
-                * This report is subject to clinical correlation. Not valid for medico-legal purposes. &bull; Generated by MediLab LIMS Pro
+            <p style="text-align: center; font-size: 9px; color: #64748b; margin-top: 15px; border-top: 1px solid #cbd5e1; padding-top: 5px;">
+                This is a computer generated report. No signature is required.
             </p>
         </div>
+        @endif
     </div>
 
 </body>

@@ -22,9 +22,15 @@
             <div class="md:col-span-2 bg-white rounded-2xl p-6 border border-slate-200/80 shadow-sm">
                 <div class="flex items-start justify-between mb-6 pb-4 border-b border-slate-100">
                     <div class="flex items-center space-x-4">
-                        <div class="w-14 h-14 rounded-2xl bg-indigo-100 text-indigo-700 flex items-center justify-center font-extrabold text-2xl shadow-sm">
-                            {{ strtoupper(substr($company->name, 0, 1)) }}
-                        </div>
+                        @if($company->logo)
+                            <div class="w-14 h-14 rounded-2xl bg-white flex items-center justify-center shadow-sm overflow-hidden p-1 border border-slate-200">
+                                <img src="{{ asset('storage/' . $company->logo) }}" alt="Logo" class="w-full h-full object-contain">
+                            </div>
+                        @else
+                            <div class="w-14 h-14 rounded-2xl bg-indigo-100 text-indigo-700 flex items-center justify-center font-extrabold text-2xl shadow-sm">
+                                {{ strtoupper(substr($company->name, 0, 1)) }}
+                            </div>
+                        @endif
                         <div>
                             <h2 class="text-xl font-bold text-slate-900">{{ $company->name }}</h2>
                             <p class="text-xs text-slate-400">ID: #LAB-{{ str_pad($company->id, 4, '0', STR_PAD_LEFT) }} • Registered {{ $company->created_at->format('M d, Y') }}</p>
