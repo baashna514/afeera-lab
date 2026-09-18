@@ -36,6 +36,18 @@ class ReportController extends Controller
             ->paginate(15)
             ->withQueryString();
 
+        $earningsByDate->getCollection()->transform(function ($row) use ($selectedTestId) {
+            $q = TestBookingItem::whereHas('booking', function ($q) use ($row) {
+                $q->whereDate('created_at', $row->date);
+            });
+            if ($selectedTestId) {
+                $q->where('lab_test_id', $selectedTestId);
+            }
+            $row->total_tests = $q->count();
+
+            return $row;
+        });
+
         // Summary Statistics (Respecting test_id filter if applied)
         $today = Carbon::today();
         $startOfWeek = Carbon::now()->startOfWeek();

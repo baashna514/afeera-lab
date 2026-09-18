@@ -10,7 +10,7 @@
             </a>
         </div>
 
-        <form method="POST" action="{{ route('owner.companies.store') }}" class="space-y-8">
+        <form method="POST" action="{{ route('owner.companies.store') }}" enctype="multipart/form-data" class="space-y-8">
             @csrf
 
             <!-- Section 1: Company Information -->
@@ -75,6 +75,18 @@
                             <option value="inactive" {{ old('status') === 'inactive' ? 'selected' : '' }}>Inactive (Suspended)</option>
                         </select>
                         @error('status')
+                            <p class="text-xs text-rose-500 mt-1 font-medium">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                                        <!-- Company Logo -->
+                    <div>
+                        <label for="company_logo" class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-2">
+                            Company Logo
+                        </label>
+                        <input type="file" name="company_logo" id="company_logo" accept="image/*"
+                               class="w-full px-4 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white transition-all">
+                        @error('company_logo')
                             <p class="text-xs text-rose-500 mt-1 font-medium">{{ $message }}</p>
                         @enderror
                     </div>

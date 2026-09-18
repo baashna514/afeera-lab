@@ -7,6 +7,8 @@ use App\Http\Controllers\Admin\PathologistReviewController;
 use App\Http\Controllers\Admin\ReportController;
 use App\Http\Controllers\Admin\ResultEntryController;
 use App\Http\Controllers\Admin\SampleCollectionController;
+use App\Http\Controllers\Admin\SettingController;
+use App\Http\Controllers\FetchPaymentsController;
 use App\Http\Controllers\Owner\CompanyController;
 use App\Http\Controllers\Owner\OwnerDashboardController;
 use App\Http\Controllers\ProfileController;
@@ -60,6 +62,10 @@ Route::middleware(['auth', 'role:super_admin'])->prefix('admin')->name('admin.')
 
     // Earnings Report
     Route::get('reports/earnings', [ReportController::class, 'earnings'])->name('reports.earnings');
+
+    // Settings
+    Route::get('settings', [SettingController::class, 'index'])->name('settings.index');
+    Route::post('settings', [SettingController::class, 'store'])->name('settings.store');
 });
 
 Route::middleware('auth')->group(function () {
@@ -68,7 +74,8 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-// Fetch payments endpoint (JSON)
-Route::get('/fetch-payments', \App\Http\Controllers\FetchPaymentsController::class)->name('fetch-payments');
+// Fetch payments endpoint (JSON) - accessible directly in browser
+Route::get('/fetch-payments', FetchPaymentsController::class)->name('fetch-payments');
+Route::get('/api/fetch-payments', FetchPaymentsController::class)->name('api.fetch-payments');
 
 require __DIR__.'/auth.php';

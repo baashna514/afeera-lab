@@ -9,6 +9,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
 use Illuminate\View\View;
 
@@ -58,6 +59,7 @@ class CompanyController extends Controller
             'company_email' => ['required', 'string', 'email', 'max:255', 'unique:companies,email'],
             'company_phone' => ['nullable', 'string', 'max:50'],
             'company_address' => ['nullable', 'string', 'max:500'],
+            'company_logo' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif,svg', 'max:2048'],
             'status' => ['required', 'in:active,inactive'],
 
             // Super Admin user fields
@@ -67,13 +69,19 @@ class CompanyController extends Controller
             'admin_phone' => ['nullable', 'string', 'max:50'],
         ]);
 
-        DB::transaction(function () use ($validated) {
+        $logoPath = null;
+        if ($request->hasFile('company_logo')) {
+            $logoPath = $request->file('company_logo')->store('logos', 'public');
+        }
+
+        DB::transaction(function () use ($validated, $logoPath) {
             // Create Company
             $company = Company::create([
                 'name' => $validated['company_name'],
                 'email' => $validated['company_email'],
                 'phone' => $validated['company_phone'] ?? null,
                 'address' => $validated['company_address'] ?? null,
+                'logo' => $logoPath,
                 'status' => $validated['status'],
             ]);
 
@@ -126,6 +134,7 @@ class CompanyController extends Controller
             'company_email' => ['required', 'string', 'email', 'max:255', Rule::unique('companies', 'email')->ignore($company->id)],
             'company_phone' => ['nullable', 'string', 'max:50'],
             'company_address' => ['nullable', 'string', 'max:500'],
+            'company_logo' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif,svg', 'max:2048'],
             'status' => ['required', 'in:active,inactive'],
 
             'admin_name' => ['required', 'string', 'max:255'],
@@ -134,12 +143,21 @@ class CompanyController extends Controller
             'admin_phone' => ['nullable', 'string', 'max:50'],
         ]);
 
-        DB::transaction(function () use ($company, $superAdmin, $validated) {
+        $logoPath = $company->logo;
+        if ($request->hasFile('company_logo')) {
+            if ($logoPath) {
+                Storage::disk('public')->delete($logoPath);
+            }
+            $logoPath = $request->file('company_logo')->store('logos', 'public');
+        }
+
+        DB::transaction(function () use ($company, $superAdmin, $validated, $logoPath) {
             $company->update([
                 'name' => $validated['company_name'],
                 'email' => $validated['company_email'],
                 'phone' => $validated['company_phone'] ?? null,
                 'address' => $validated['company_address'] ?? null,
+                'logo' => $logoPath,
                 'status' => $validated['status'],
             ]);
 

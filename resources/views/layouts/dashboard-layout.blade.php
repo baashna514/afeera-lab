@@ -14,6 +14,9 @@
     <!-- FontAwesome for icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
 
+    <!-- Alpine.js -->
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
     <!-- Scripts & Styles -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
@@ -24,16 +27,56 @@
             <!-- Brand Logo / Name -->
             <div class="p-5 flex items-center justify-between border-b border-slate-800">
                 <div class="flex items-center space-x-3">
-                    <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-500 to-cyan-400 flex items-center justify-center text-white font-bold text-xl shadow-lg shadow-indigo-500/30">
-                        <i class="fa-solid fa-microscope"></i>
-                    </div>
+                    @php
+                        $authUser = auth()->user();
+
+                        // 1. Identify relevant company
+                        $userCompany = null;
+                        if ($authUser && $authUser->company_id) {
+                            $userCompany = \App\Models\Company::find($authUser->company_id);
+                        } elseif (request()->route('company') instanceof \App\Models\Company) {
+                            $userCompany = request()->route('company');
+                        } elseif (is_numeric(request()->route('company'))) {
+                            $userCompany = \App\Models\Company::find(request()->route('company'));
+                        } else {
+                            $userCompany = \App\Models\Company::whereNotNull('logo')->where('logo', '!=', '')->latest()->first() 
+                                ?? \App\Models\Company::latest()->first();
+                        }
+
+                        // 2. Fetch company settings if available
+                        $companySetting = $userCompany 
+                            ? \App\Models\CompanySetting::where('company_id', $userCompany->id)->first() 
+                            : null;
+
+                        // 3. Resolve logo (priority: CompanySetting logo -> Company logo -> Owner profile logo -> null)
+                        $sidebarLogo = $companySetting?->company_logo 
+                            ?? $userCompany?->logo 
+                            ?? $authUser?->logo 
+                            ?? null;
+                    @endphp
+
+                    @if($sidebarLogo)
+                        <div class="w-10 h-10 rounded-xl bg-white flex items-center justify-center shadow-lg overflow-hidden p-1 border border-slate-700">
+                            <img src="{{ asset('storage/' . $sidebarLogo) }}" alt="Logo" class="w-full h-full object-contain">
+                        </div>
+                    @else
+                        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-500 to-cyan-400 flex items-center justify-center text-white font-bold text-xl shadow-lg shadow-indigo-500/30">
+                            <i class="fa-solid fa-microscope"></i>
+                        </div>
+                    @endif
                     <div>
-                        <h1 class="font-bold text-lg leading-tight tracking-wide text-white">MediLab LIMS</h1>
+                        <h1 class="font-bold text-lg leading-tight tracking-wide text-white">
+                            @if($authUser && $authUser->role === 'owner')
+                                MediLab LIMS
+                            @else
+                                {{ $companySetting?->company_name ?? $userCompany?->name ?? 'MediLab LIMS' }}
+                            @endif
+                        </h1>
                         <span class="text-xs text-indigo-400 font-medium">
-                            @if(auth()->user()->role === 'owner')
+                            @if($authUser && $authUser->role === 'owner')
                                 SaaS Control Center
                             @else
-                                {{ auth()->user()->company->name ?? 'Lab System' }}
+                                {{ $companySetting?->company_name ?? $userCompany?->name ?? 'Lab System' }}
                             @endif
                         </span>
                     </div>
@@ -56,6 +99,14 @@
                         <i class="fa-solid fa-building flex-shrink-0 w-5 text-center text-base"></i>
                         <span>Companies Management</span>
                     </a>
+
+                    <p class="px-3 text-xs font-semibold text-slate-400 uppercase tracking-wider mt-6 mb-2">System</p>
+                    
+                    <a href="{{ route('profile.edit') }}" 
+                       class="flex items-center space-x-3 px-3.5 py-2.5 rounded-lg text-sm font-medium transition-colors {{ request()->routeIs('profile.edit') ? 'bg-indigo-600 text-white shadow-md shadow-indigo-600/30' : 'text-slate-300 hover:bg-slate-800 hover:text-white' }}">
+                        <i class="fa-solid fa-user-gear w-5 text-center text-base"></i>
+                        <span>Profile & Settings</span>
+                    </a>
                 @elseif(auth()->user()->role === 'super_admin')
                     <p class="px-3 text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Main Menu</p>
                     
@@ -65,26 +116,44 @@
                         <span>Dashboard</span>
                     </a>
 
+                    <a href="{{ route('admin.tests.index') }}" 
+                       class="flex items-center space-x-3 px-3.5 py-2.5 rounded-lg text-sm font-medium transition-colors {{ request()->routeIs('admin.tests.*') ? 'bg-indigo-600 text-white shadow-md shadow-indigo-600/30' : 'text-slate-300 hover:bg-slate-800 hover:text-white' }}">
+                        <i class="fa-solid fa-flask-vial w-5 text-center text-base"></i>
+                        <span>Test Management</span>
+                    </a>
+
                     <p class="px-3 text-xs font-semibold text-slate-400 uppercase tracking-wider mt-6 mb-2">Lab Operations</p>
 
-                    <a href="#" class="flex items-center space-x-3 px-3.5 py-2.5 rounded-lg text-sm font-medium text-slate-400 hover:bg-slate-800 hover:text-slate-200 transition-colors opacity-75 cursor-not-allowed" title="Module 1 - Patient Booking">
+                    <a href="{{ route('admin.bookings.create') }}" class="flex items-center space-x-3 px-3.5 py-2.5 rounded-lg text-sm font-medium transition-colors {{ request()->routeIs('admin.bookings.create') ? 'bg-indigo-600 text-white shadow-md shadow-indigo-600/30' : 'text-slate-300 hover:bg-slate-800 hover:text-white' }}">
                         <i class="fa-solid fa-user-plus w-5 text-center"></i>
                         <span>Patient Registration</span>
                     </a>
 
-                    <a href="#" class="flex items-center space-x-3 px-3.5 py-2.5 rounded-lg text-sm font-medium text-slate-400 hover:bg-slate-800 hover:text-slate-200 transition-colors opacity-75 cursor-not-allowed" title="Module 2 - Sample Collection & Barcodes">
+                    <a href="{{ route('admin.samples.index') }}" class="flex items-center space-x-3 px-3.5 py-2.5 rounded-lg text-sm font-medium transition-colors {{ request()->routeIs('admin.samples.*') ? 'bg-indigo-600 text-white shadow-md shadow-indigo-600/30' : 'text-slate-300 hover:bg-slate-800 hover:text-white' }}">
                         <i class="fa-solid fa-vial w-5 text-center"></i>
                         <span>Sample Collection</span>
                     </a>
 
-                    <a href="#" class="flex items-center space-x-3 px-3.5 py-2.5 rounded-lg text-sm font-medium text-slate-400 hover:bg-slate-800 hover:text-slate-200 transition-colors opacity-75 cursor-not-allowed" title="Module 3 - Dynamic Test Result Entry">
+                    <a href="{{ route('admin.bookings.index') }}" class="flex items-center space-x-3 px-3.5 py-2.5 rounded-lg text-sm font-medium transition-colors {{ request()->routeIs('admin.bookings.index', 'admin.results.*') ? 'bg-indigo-600 text-white shadow-md shadow-indigo-600/30' : 'text-slate-300 hover:bg-slate-800 hover:text-white' }}">
                         <i class="fa-solid fa-file-waveform w-5 text-center"></i>
                         <span>Test Result Entry</span>
                     </a>
 
-                    <a href="#" class="flex items-center space-x-3 px-3.5 py-2.5 rounded-lg text-sm font-medium text-slate-400 hover:bg-slate-800 hover:text-slate-200 transition-colors opacity-75 cursor-not-allowed" title="Module 4 - Pathologist Review">
+                    <a href="{{ route('admin.reviews.index') }}" class="flex items-center space-x-3 px-3.5 py-2.5 rounded-lg text-sm font-medium transition-colors {{ request()->routeIs('admin.reviews.*') ? 'bg-indigo-600 text-white shadow-md shadow-indigo-600/30' : 'text-slate-300 hover:bg-slate-800 hover:text-white' }}">
                         <i class="fa-solid fa-user-doctor w-5 text-center"></i>
                         <span>Pathologist Review</span>
+                    </a>
+
+                    <a href="{{ route('admin.settings.index') }}" class="flex items-center space-x-3 px-3.5 py-2.5 rounded-lg text-sm font-medium transition-colors {{ request()->routeIs('admin.settings.*') ? 'bg-indigo-600 text-white shadow-md shadow-indigo-600/30' : 'text-slate-300 hover:bg-slate-800 hover:text-white' }}" title="System Settings">
+                        <i class="fa-solid fa-gear w-5 text-center"></i>
+                        <span>System Settings</span>
+                    </a>
+
+                    <p class="px-3 text-xs font-semibold text-slate-400 uppercase tracking-wider mt-6 mb-2">Reports</p>
+
+                    <a href="{{ route('admin.reports.earnings') }}" class="flex items-center space-x-3 px-3.5 py-2.5 rounded-lg text-sm font-medium transition-colors {{ request()->routeIs('admin.reports.*') ? 'bg-indigo-600 text-white shadow-md shadow-indigo-600/30' : 'text-slate-300 hover:bg-slate-800 hover:text-white' }}">
+                        <i class="fa-solid fa-chart-line w-5 text-center text-base"></i>
+                        <span>Earnings Report</span>
                     </a>
                 @endif
             </nav>
@@ -93,9 +162,15 @@
             <div class="p-4 border-t border-slate-800 bg-slate-950/50">
                 <div class="flex items-center justify-between">
                     <div class="flex items-center space-x-3 overflow-hidden">
-                        <div class="w-9 h-9 rounded-full bg-slate-700 flex items-center justify-center font-bold text-white text-sm">
-                            {{ strtoupper(substr(auth()->user()->name, 0, 1)) }}
-                        </div>
+                        @if($sidebarLogo)
+                            <div class="w-9 h-9 rounded-full bg-white overflow-hidden flex-shrink-0 border border-slate-600">
+                                <img src="{{ asset('storage/' . $sidebarLogo) }}" alt="Logo" class="w-full h-full object-contain p-0.5">
+                            </div>
+                        @else
+                            <div class="w-9 h-9 rounded-full bg-slate-700 flex items-center justify-center font-bold text-white text-sm flex-shrink-0">
+                                {{ strtoupper(substr(auth()->user()->name, 0, 1)) }}
+                            </div>
+                        @endif
                         <div class="truncate">
                             <p class="text-sm font-medium text-slate-200 truncate">{{ auth()->user()->name }}</p>
                             <p class="text-xs text-slate-400 capitalize truncate">{{ str_replace('_', ' ', auth()->user()->role) }}</p>

@@ -13,9 +13,20 @@
         @csrf
     </form>
 
-    <form method="post" action="{{ route('profile.update') }}" class="mt-6 space-y-6">
+    <form method="post" action="{{ route('profile.update') }}" enctype="multipart/form-data" class="mt-6 space-y-6">
         @csrf
         @method('patch')
+
+        <div>
+            <x-input-label for="logo" value="Profile Logo / Avatar (Optional)" />
+            @if ($user->logo)
+                <div class="mt-2 mb-2">
+                    <img src="{{ asset('storage/' . $user->logo) }}" alt="Logo" class="h-16 w-16 object-cover rounded-xl border border-gray-200">
+                </div>
+            @endif
+            <input type="file" id="logo" name="logo" accept="image/*" class="mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100" />
+            <x-input-error class="mt-2" :messages="$errors->get('logo')" />
+        </div>
 
         <div>
             <x-input-label for="name" :value="__('Name')" />

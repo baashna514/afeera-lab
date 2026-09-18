@@ -154,7 +154,8 @@
                                 {{ \Carbon\Carbon::parse($row->date)->format('M d, Y') }}
                             </td>
                             <td class="px-6 py-4 text-slate-600 font-medium">
-                                {{ $row->total_bookings }} Bookings
+                                {{ $row->total_bookings }} Bookings<br>
+                                <span class="text-xs text-slate-500">{{ $row->total_tests }} Tests</span>
                             </td>
                             <td class="px-6 py-4 text-slate-600 font-mono">
                                 Rs. {{ number_format($row->total_invoiced, 2) }}
