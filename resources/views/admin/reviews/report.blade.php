@@ -263,22 +263,43 @@
             @if(!$setting || $setting->show_header)
             <div class="lab-header">
                 <div class="lab-branding">
-                    @if($setting && $setting->company_logo)
+                    @if((!$setting || $setting->show_header_logo) && $setting && $setting->company_logo)
                         <img src="{{ asset('storage/' . $setting->company_logo) }}" alt="Logo">
                     @endif
                     <div>
-                        <h1>{{ $setting->company_name ?? $company->name ?? 'Clinical Pathology Laboratory' }}</h1>
-                        <p>{{ $setting->company_address ?? $company->address ?? 'Main Road, Hospital Campus' }}</p>
-                        <p>Phone: {{ $setting->company_phone ?? $company->phone ?? '0300-0000000' }} @if($setting && $setting->company_email) | Email: {{ $setting->company_email }} @endif</p>
+                        @if(!$setting || $setting->show_header_company_name)
+                            <h1>{{ $setting->company_name ?? $company->name ?? 'Clinical Pathology Laboratory' }}</h1>
+                        @endif
+                        @if(!$setting || $setting->show_header_address)
+                            <p>{{ $setting->company_address ?? $company->address ?? 'Main Road, Hospital Campus' }}</p>
+                        @endif
+                        @if((!$setting || $setting->show_header_phone) || ((!$setting || $setting->show_header_email) && $setting && $setting->company_email))
+                        <p>
+                            @if(!$setting || $setting->show_header_phone)
+                                <span>Phone: {{ $setting->company_phone ?? $company->phone ?? '0300-0000000' }}</span>
+                            @endif
+                            @if((!$setting || $setting->show_header_email) && $setting && $setting->company_email)
+                                <span> | Email: {{ $setting->company_email }}</span>
+                            @endif
+                        </p>
+                        @endif
                     </div>
                 </div>
                 <div class="lab-report-info">
                     <div style="font-size: 16px; font-weight: 900; margin-bottom: 6px; text-transform: uppercase; color:#0f172a;">Laboratory Report</div>
                     <table>
-                        <tr><td class="lbl">Lab No.</td><td>: {{ $booking->invoice_number }}</td></tr>
-                        <tr><td class="lbl">Report Date</td><td>: {{ now()->format('d-M-Y h:i A') }}</td></tr>
-                        <tr><td class="lbl">Sample Collected</td><td>: {{ $booking->created_at->format('d-M-Y h:i A') }}</td></tr>
-                        <tr><td class="lbl">Report Status</td><td>: Final</td></tr>
+                        @if(!$setting || $setting->show_header_lab_no)
+                            <tr><td class="lbl">Lab No.</td><td>: {{ $booking->lab_number ?: $booking->invoice_number }}</td></tr>
+                        @endif
+                        @if(!$setting || $setting->show_header_report_date)
+                            <tr><td class="lbl">Report Date</td><td>: {{ now()->format('d-M-Y h:i A') }}</td></tr>
+                        @endif
+                        @if(!$setting || $setting->show_header_sample_date)
+                            <tr><td class="lbl">Sample Collected</td><td>: {{ ($booking->items->first()?->collected_at ?? $booking->created_at)->format('d-M-Y h:i A') }}</td></tr>
+                        @endif
+                        @if(!$setting || $setting->show_header_report_status)
+                            <tr><td class="lbl">Report Status</td><td>: {{ ucfirst($booking->status === 'completed' ? 'Final' : $booking->status) }}</td></tr>
+                        @endif
                     </table>
                 </div>
             </div>
@@ -289,19 +310,37 @@
             <div class="patient-box">
                 <div>
                     <table>
-                        <tr><td class="lbl">Patient Name</td><td>: <strong>{{ $booking->patient->name }}</strong></td></tr>
-                        <tr><td class="lbl">Age / Gender</td><td>: {{ $booking->patient->age ? $booking->patient->age.' Years' : '--' }} / {{ ucfirst($booking->patient->gender ?? 'N/A') }}</td></tr>
-                        <tr><td class="lbl">Patient ID</td><td>: PID-{{ str_pad($booking->patient->id, 6, '0', STR_PAD_LEFT) }}</td></tr>
-                        <tr><td class="lbl">Referred By</td><td>: Dr. Consultant Physician</td></tr>
-                        <tr><td class="lbl">Contact</td><td>: {{ $booking->patient->phone ?? '--' }}</td></tr>
+                        @if(!$setting || $setting->show_patient_name)
+                            <tr><td class="lbl">Patient Name</td><td>: <strong>{{ $booking->patient->name }}</strong></td></tr>
+                        @endif
+                        @if(!$setting || $setting->show_patient_age_gender)
+                            <tr><td class="lbl">Age / Gender</td><td>: {{ $booking->patient->age ? $booking->patient->age.' Years' : '--' }} / {{ ucfirst($booking->patient->gender ?? 'N/A') }}</td></tr>
+                        @endif
+                        @if(!$setting || $setting->show_patient_id)
+                            <tr><td class="lbl">Patient ID</td><td>: PID-{{ str_pad($booking->patient->id, 6, '0', STR_PAD_LEFT) }}</td></tr>
+                        @endif
+                        @if(!$setting || $setting->show_patient_referred_by)
+                            <tr><td class="lbl">Referred By</td><td>: {{ $booking->referred_by ?: ($setting->default_referred_by ?? 'Dr. Consultant Physician') }}</td></tr>
+                        @endif
+                        @if(!$setting || $setting->show_patient_contact)
+                            <tr><td class="lbl">Contact</td><td>: {{ $booking->patient->phone ?? '--' }}</td></tr>
+                        @endif
                     </table>
                 </div>
                 <div>
                     <table>
-                        <tr><td class="lbl">Collection Type</td><td>: Venous Blood</td></tr>
-                        <tr><td class="lbl">Fasting</td><td>: No</td></tr>
-                        <tr><td class="lbl">Clinical Info</td><td>: Routine Check-up</td></tr>
-                        <tr><td class="lbl">Barcode No</td><td>: {{ $booking->items->first()->barcode ?? '--' }}</td></tr>
+                        @if(!$setting || $setting->show_patient_collection_type)
+                            <tr><td class="lbl">Collection Type</td><td>: {{ $booking->collection_type ?: ($setting->default_collection_type ?? ($booking->items->first()?->sample_type ?? 'Venous Blood')) }}</td></tr>
+                        @endif
+                        @if(!$setting || $setting->show_patient_fasting)
+                            <tr><td class="lbl">Fasting</td><td>: {{ $booking->fasting ?: ($setting->default_fasting ?? 'No') }}</td></tr>
+                        @endif
+                        @if(!$setting || $setting->show_patient_clinical_info)
+                            <tr><td class="lbl">Clinical Info</td><td>: {{ $booking->clinical_info ?: ($setting->default_clinical_info ?? 'Routine Check-up') }}</td></tr>
+                        @endif
+                        @if(!$setting || $setting->show_patient_barcode)
+                            <tr><td class="lbl">Barcode No</td><td>: {{ $booking->items->first()->barcode ?? '--' }}</td></tr>
+                        @endif
                     </table>
                 </div>
             </div>
@@ -358,31 +397,43 @@
         <div>
             <div class="report-footer">
                 <div class="sign-col" style="text-align: left; width: 120px;">
-                    <!-- QR Code Placeholder -->
-                    <img src="https://api.qrserver.com/v1/create-qr-code/?size=80x80&data={{ urlencode(route('admin.reviews.show', $booking)) }}" alt="QR Code" style="width: 60px; height: 60px;">
+                    @if(!$setting || $setting->show_footer_qr)
+                        <!-- QR Code Placeholder -->
+                        <img src="https://api.qrserver.com/v1/create-qr-code/?size=80x80&data={{ urlencode(route('admin.reviews.show', $booking)) }}" alt="QR Code" style="width: 60px; height: 60px;">
+                    @endif
                 </div>
 
                 <div class="sign-col right">
                     @if($setting && $setting->doctor_name)
-                        <!-- Signature placeholder image could go here -->
-                        <div style="height: 40px; margin-bottom: 5px;">
-                            <img src="https://upload.wikimedia.org/wikipedia/commons/f/f6/Signature_placeholder.svg" style="height: 40px; opacity: 0.6;" alt="Signature">
-                        </div>
-                        <div class="sign-title">{{ $setting->doctor_name }}</div>
+                        @if(!$setting || $setting->show_footer_signature)
+                            <!-- Signature placeholder image could go here -->
+                            <div style="height: 40px; margin-bottom: 5px;">
+                                <img src="https://upload.wikimedia.org/wikipedia/commons/f/f6/Signature_placeholder.svg" style="height: 40px; opacity: 0.6;" alt="Signature">
+                            </div>
+                        @endif
+                        @if(!$setting || $setting->show_footer_doctor_name)
+                            <div class="sign-title">{{ $setting->doctor_name }}</div>
+                        @endif
                         <div class="sign-subtitle">
-                            @if($setting->doctor_degree) {{ $setting->doctor_degree }} <br> @endif
-                            @if($setting->doctor_reg_no) {{ $setting->doctor_reg_no }} @endif
+                            @if((!$setting || $setting->show_footer_doctor_degree) && $setting->doctor_degree) {{ $setting->doctor_degree }} <br> @endif
+                            @if((!$setting || $setting->show_footer_doctor_reg) && $setting->doctor_reg_no) {{ $setting->doctor_reg_no }} @endif
                         </div>
                     @else
-                        <div style="height: 40px; border-bottom: 1px solid #cbd5e1; margin-bottom: 5px; width: 150px; display: inline-block;"></div>
-                        <div class="sign-title">Authorized Signatory</div>
+                        @if(!$setting || $setting->show_footer_signature)
+                            <div style="height: 40px; border-bottom: 1px solid #cbd5e1; margin-bottom: 5px; width: 150px; display: inline-block;"></div>
+                        @endif
+                        @if(!$setting || $setting->show_footer_doctor_name)
+                            <div class="sign-title">Authorized Signatory</div>
+                        @endif
                         <div class="sign-subtitle">Consultant Pathologist</div>
                     @endif
                 </div>
             </div>
-            <p style="text-align: center; font-size: 9px; color: #64748b; margin-top: 15px; border-top: 1px solid #cbd5e1; padding-top: 5px;">
-                This is a computer generated report. No signature is required.
-            </p>
+            @if(!$setting || $setting->show_footer_disclaimer)
+                <p style="text-align: center; font-size: 9px; color: #64748b; margin-top: 15px; border-top: 1px solid #cbd5e1; padding-top: 5px;">
+                    This is a computer generated report. No signature is required.
+                </p>
+            @endif
         </div>
         @endif
     </div>

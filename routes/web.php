@@ -66,6 +66,7 @@ Route::middleware(['auth', 'role:super_admin'])->prefix('admin')->name('admin.')
     // Settings
     Route::get('settings', [SettingController::class, 'index'])->name('settings.index');
     Route::post('settings', [SettingController::class, 'store'])->name('settings.store');
+    Route::delete('settings/logo', [SettingController::class, 'removeLogo'])->name('settings.remove-logo');
 });
 
 Route::middleware('auth')->group(function () {
