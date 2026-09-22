@@ -295,7 +295,7 @@
                             <tr><td class="lbl">Report Date</td><td>: {{ now()->format('d-M-Y h:i A') }}</td></tr>
                         @endif
                         @if(!$setting || $setting->show_header_sample_date)
-                            <tr><td class="lbl">Sample Collected</td><td>: {{ ($booking->items->first()?->collected_at ?? $booking->created_at)->format('d-M-Y h:i A') }}</td></tr>
+                            <tr><td class="lbl">Sample Collected</td><td>: {{ \Carbon\Carbon::parse($booking->items->first()?->collected_at ?? $booking->created_at)->format('d-M-Y h:i A') }}</td></tr>
                         @endif
                         @if(!$setting || $setting->show_header_report_status)
                             <tr><td class="lbl">Report Status</td><td>: {{ ucfirst($booking->status === 'completed' ? 'Final' : $booking->status) }}</td></tr>
