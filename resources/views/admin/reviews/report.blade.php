@@ -371,7 +371,17 @@
                                     <td class="result-val">{{ $param->result_value ?? '--' }}</td>
                                     <td class="unit">{{ $param->unit ?? '--' }}</td>
                                     <td class="range">{{ $param->normal_range_text ?? '--' }}</td>
-                                    <td class="flag-normal">Normal</td>
+                                    <td class="{{ $param->flag_class }}">
+                                        @if($param->flag === 'Low')
+                                            &darr; Low
+                                        @elseif($param->flag === 'High')
+                                            &uarr; High
+                                        @elseif($param->flag === 'Normal')
+                                            Normal
+                                        @else
+                                            --
+                                        @endif
+                                    </td>
                                 </tr>
                             @endforeach
                         </tbody>

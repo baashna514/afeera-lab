@@ -81,6 +81,7 @@
                                     <th class="px-6 py-3">Observed Result</th>
                                     <th class="px-6 py-3">Unit</th>
                                     <th class="px-6 py-3">Biological Normal Range</th>
+                                    <th class="px-6 py-3">Flag</th>
                                 </tr>
                             </thead>
                             <tbody class="divide-y divide-slate-100 text-sm">
@@ -97,6 +98,23 @@
                                         </td>
                                         <td class="px-6 py-3.5 text-slate-600 text-xs font-medium">
                                             {{ $param->normal_range_text ?? '--' }}
+                                        </td>
+                                        <td class="px-6 py-3.5">
+                                            @if($param->flag === 'High')
+                                                <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-bold bg-rose-100 text-rose-800">
+                                                    &uarr; High
+                                                </span>
+                                            @elseif($param->flag === 'Low')
+                                                <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-bold bg-amber-100 text-amber-800">
+                                                    &darr; Low
+                                                </span>
+                                            @elseif($param->flag === 'Normal')
+                                                <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-bold bg-emerald-100 text-emerald-800">
+                                                    Normal
+                                                </span>
+                                            @else
+                                                <span class="text-xs text-slate-400">--</span>
+                                            @endif
                                         </td>
                                     </tr>
                                 @endforeach
