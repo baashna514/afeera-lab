@@ -35,6 +35,11 @@ class BookingController extends Controller
             'patient_phone' => 'nullable|string|max:255',
             'patient_age' => 'nullable|integer',
             'patient_gender' => 'nullable|in:male,female,other',
+            'lab_number' => 'nullable|string|max:255',
+            'referred_by' => 'nullable|string|max:255',
+            'collection_type' => 'nullable|string|max:255',
+            'fasting' => 'nullable|string|max:255',
+            'clinical_info' => 'nullable|string|max:1000',
             'test_ids' => 'required|array',
             'test_ids.*' => 'exists:lab_tests,id',
             'discount' => 'nullable|numeric|min:0',
@@ -67,9 +72,17 @@ class BookingController extends Controller
                 $paymentStatus = 'unpaid';
             }
 
+            $invoiceNumber = 'INV-'.time().'-'.rand(100, 999);
+            $labNumber = $request->filled('lab_number') ? $request->lab_number : $invoiceNumber;
+
             $booking = TestBooking::create([
                 'patient_id' => $patient->id,
-                'invoice_number' => 'INV-'.time().'-'.rand(100, 999),
+                'invoice_number' => $invoiceNumber,
+                'lab_number' => $labNumber,
+                'referred_by' => $request->referred_by ?: 'Dr. Consultant Physician',
+                'collection_type' => $request->collection_type ?: 'Venous Blood',
+                'fasting' => $request->fasting ?: 'No',
+                'clinical_info' => $request->clinical_info ?: 'Routine Check-up',
                 'total_amount' => $totalAmount,
                 'discount' => $discount,
                 'paid_amount' => $paidAmount,

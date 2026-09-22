@@ -42,6 +42,49 @@
                                 <option value="other">Other</option>
                             </select>
                         </div>
+
+                        <!-- Additional Clinical & Sample Info (Optional) -->
+                        <div class="md:col-span-2 pt-4 border-t border-slate-100">
+                            <h4 class="text-xs font-bold uppercase tracking-wider text-slate-500 mb-3 flex items-center gap-1.5">
+                                <i class="fa-solid fa-notes-medical text-indigo-500"></i>
+                                Clinical & Sample Details (Optional for Diagnostic Report)
+                            </h4>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-slate-700 mb-1">Referred By (Doctor)</label>
+                                    <input type="text" name="referred_by" placeholder="e.g. Dr. Consultant Physician (or Walk-in)" class="w-full rounded-lg border-slate-300 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-slate-700 mb-1">Custom Lab / MR No.</label>
+                                    <input type="text" name="lab_number" placeholder="Leave blank for auto-generated number" class="w-full rounded-lg border-slate-300 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-slate-700 mb-1">Collection Type (Specimen)</label>
+                                    <select name="collection_type" class="w-full rounded-lg border-slate-300 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+                                        <option value="Venous Blood">Venous Blood</option>
+                                        <option value="Capillary Blood">Capillary Blood</option>
+                                        <option value="Serum">Serum</option>
+                                        <option value="Plasma">Plasma</option>
+                                        <option value="Urine Sample">Urine Sample</option>
+                                        <option value="Swab / Specimen">Swab / Specimen</option>
+                                        <option value="Other">Other</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-slate-700 mb-1">Fasting Status</label>
+                                    <select name="fasting" class="w-full rounded-lg border-slate-300 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+                                        <option value="No">No</option>
+                                        <option value="Yes (10-12 Hours)">Yes (10-12 Hours)</option>
+                                        <option value="Yes (8 Hours)">Yes (8 Hours)</option>
+                                        <option value="Random / Not Required">Random / Not Required</option>
+                                    </select>
+                                </div>
+                                <div class="md:col-span-2">
+                                    <label class="block text-sm font-medium text-slate-700 mb-1">Clinical Information / Indication</label>
+                                    <input type="text" name="clinical_info" placeholder="e.g. Routine Check-up, Fever, Pre-operative, etc." class="w-full rounded-lg border-slate-300 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </form>
