@@ -52,36 +52,45 @@
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <div>
                                     <label class="block text-sm font-medium text-slate-700 mb-1">Referred By (Doctor)</label>
-                                    <input type="text" name="referred_by" placeholder="e.g. Dr. Consultant Physician (or Walk-in)" class="w-full rounded-lg border-slate-300 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+                                    <input type="text" name="referred_by" value="{{ old('referred_by', $setting->default_referred_by ?? '') }}" placeholder="e.g. Dr. Consultant Physician (or Walk-in)" class="w-full rounded-lg border-slate-300 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
                                 </div>
                                 <div>
                                     <label class="block text-sm font-medium text-slate-700 mb-1">Custom Lab / MR No.</label>
-                                    <input type="text" name="lab_number" placeholder="Leave blank for auto-generated number" class="w-full rounded-lg border-slate-300 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+                                    <input type="text" name="lab_number" value="{{ old('lab_number') }}" placeholder="Leave blank for auto-generated number (Prefix: {{ $setting->default_lab_prefix ?? 'INV-' }})" class="w-full rounded-lg border-slate-300 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
                                 </div>
                                 <div>
                                     <label class="block text-sm font-medium text-slate-700 mb-1">Collection Type (Specimen)</label>
+                                    @php
+                                        $selectedCollection = old('collection_type', $setting->default_collection_type ?? 'Venous Blood');
+                                        $collectionOptions = ['Venous Blood', 'Capillary Blood', 'Serum', 'Plasma', 'Urine Sample', 'Swab / Specimen', 'Other'];
+                                        if ($selectedCollection && !in_array($selectedCollection, $collectionOptions)) {
+                                            array_unshift($collectionOptions, $selectedCollection);
+                                        }
+                                    @endphp
                                     <select name="collection_type" class="w-full rounded-lg border-slate-300 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
-                                        <option value="Venous Blood">Venous Blood</option>
-                                        <option value="Capillary Blood">Capillary Blood</option>
-                                        <option value="Serum">Serum</option>
-                                        <option value="Plasma">Plasma</option>
-                                        <option value="Urine Sample">Urine Sample</option>
-                                        <option value="Swab / Specimen">Swab / Specimen</option>
-                                        <option value="Other">Other</option>
+                                        @foreach($collectionOptions as $opt)
+                                            <option value="{{ $opt }}" {{ $selectedCollection === $opt ? 'selected' : '' }}>{{ $opt }}</option>
+                                        @endforeach
                                     </select>
                                 </div>
                                 <div>
                                     <label class="block text-sm font-medium text-slate-700 mb-1">Fasting Status</label>
+                                    @php
+                                        $selectedFasting = old('fasting', $setting->default_fasting ?? 'No');
+                                        $fastingOptions = ['No', 'Yes (10-12 Hours)', 'Yes (8 Hours)', 'Random / Not Required'];
+                                        if ($selectedFasting && !in_array($selectedFasting, $fastingOptions)) {
+                                            array_unshift($fastingOptions, $selectedFasting);
+                                        }
+                                    @endphp
                                     <select name="fasting" class="w-full rounded-lg border-slate-300 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
-                                        <option value="No">No</option>
-                                        <option value="Yes (10-12 Hours)">Yes (10-12 Hours)</option>
-                                        <option value="Yes (8 Hours)">Yes (8 Hours)</option>
-                                        <option value="Random / Not Required">Random / Not Required</option>
+                                        @foreach($fastingOptions as $opt)
+                                            <option value="{{ $opt }}" {{ $selectedFasting === $opt ? 'selected' : '' }}>{{ $opt }}</option>
+                                        @endforeach
                                     </select>
                                 </div>
                                 <div class="md:col-span-2">
                                     <label class="block text-sm font-medium text-slate-700 mb-1">Clinical Information / Indication</label>
-                                    <input type="text" name="clinical_info" placeholder="e.g. Routine Check-up, Fever, Pre-operative, etc." class="w-full rounded-lg border-slate-300 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+                                    <input type="text" name="clinical_info" value="{{ old('clinical_info', $setting->default_clinical_info ?? '') }}" placeholder="e.g. Routine Check-up, Fever, Pre-operative, etc." class="w-full rounded-lg border-slate-300 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
                                 </div>
                             </div>
                         </div>

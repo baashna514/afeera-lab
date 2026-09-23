@@ -351,4 +351,65 @@ class ReportDisplaySettingsTest extends TestCase
         $response->assertSee('flag-high');
         $response->assertSee('flag-normal');
     }
+
+    public function test_booking_create_form_prefills_default_values_from_settings()
+    {
+        $company = Company::factory()->create();
+        $admin = User::factory()->create(['company_id' => $company->id, 'role' => 'super_admin']);
+
+        CompanySetting::create([
+            'company_id' => $company->id,
+            'default_referred_by' => 'Dr. Naeem Abbas Siyal',
+            'default_collection_type' => 'Serum',
+            'default_fasting' => 'Yes (10-12 Hours)',
+            'default_clinical_info' => 'Routine Liver Check-up',
+            'default_lab_prefix' => 'SYL-',
+        ]);
+
+        $response = $this->actingAs($admin)->get(route('admin.bookings.create'));
+        $response->assertStatus(200);
+        $response->assertSee('Dr. Naeem Abbas Siyal');
+        $response->assertSee('Routine Liver Check-up');
+        $response->assertSee('SYL-');
+    }
+
+    public function test_booking_store_uses_company_setting_defaults_when_inputs_empty()
+    {
+        $company = Company::factory()->create();
+        $admin = User::factory()->create(['company_id' => $company->id, 'role' => 'super_admin']);
+
+        CompanySetting::create([
+            'company_id' => $company->id,
+            'default_referred_by' => 'Dr. Naeem Abbas Siyal',
+            'default_collection_type' => 'Serum',
+            'default_fasting' => 'Yes (10-12 Hours)',
+            'default_clinical_info' => 'Routine Liver Check-up',
+            'default_lab_prefix' => 'SYL-',
+        ]);
+
+        $test = LabTest::create([
+            'company_id' => $company->id,
+            'category' => 'Biochemistry',
+            'name' => 'LFT',
+            'price' => 2000,
+        ]);
+
+        $response = $this->actingAs($admin)->post(route('admin.bookings.store'), [
+            'patient_name' => 'Ali Khan',
+            'test_ids' => [$test->id],
+            'referred_by' => null,
+            'collection_type' => null,
+            'fasting' => null,
+            'clinical_info' => null,
+        ]);
+
+        $response->assertRedirect(route('admin.bookings.index'));
+
+        $this->assertDatabaseHas('test_bookings', [
+            'referred_by' => 'Dr. Naeem Abbas Siyal',
+            'collection_type' => 'Serum',
+            'fasting' => 'Yes (10-12 Hours)',
+            'clinical_info' => 'Routine Liver Check-up',
+        ]);
+    }
 }

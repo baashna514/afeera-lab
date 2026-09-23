@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\CompanySetting;
 use App\Models\LabTest;
 use App\Models\Patient;
 use App\Models\TestBooking;
@@ -24,8 +25,9 @@ class BookingController extends Controller
     public function create()
     {
         $labTests = LabTest::where('status', 'active')->get();
+        $setting = CompanySetting::first();
 
-        return view('admin.bookings.create', compact('labTests'));
+        return view('admin.bookings.create', compact('labTests', 'setting'));
     }
 
     public function store(Request $request)
@@ -72,17 +74,19 @@ class BookingController extends Controller
                 $paymentStatus = 'unpaid';
             }
 
-            $invoiceNumber = 'INV-'.time().'-'.rand(100, 999);
+            $setting = CompanySetting::first();
+            $prefix = $setting?->default_lab_prefix ?: 'INV-';
+            $invoiceNumber = $prefix.time().'-'.rand(100, 999);
             $labNumber = $request->filled('lab_number') ? $request->lab_number : $invoiceNumber;
 
             $booking = TestBooking::create([
                 'patient_id' => $patient->id,
                 'invoice_number' => $invoiceNumber,
                 'lab_number' => $labNumber,
-                'referred_by' => $request->referred_by ?: 'Dr. Consultant Physician',
-                'collection_type' => $request->collection_type ?: 'Venous Blood',
-                'fasting' => $request->fasting ?: 'No',
-                'clinical_info' => $request->clinical_info ?: 'Routine Check-up',
+                'referred_by' => $request->filled('referred_by') ? $request->referred_by : ($setting?->default_referred_by ?? null),
+                'collection_type' => $request->filled('collection_type') ? $request->collection_type : ($setting?->default_collection_type ?? 'Venous Blood'),
+                'fasting' => $request->filled('fasting') ? $request->fasting : ($setting?->default_fasting ?? 'No'),
+                'clinical_info' => $request->filled('clinical_info') ? $request->clinical_info : ($setting?->default_clinical_info ?? null),
                 'total_amount' => $totalAmount,
                 'discount' => $discount,
                 'paid_amount' => $paidAmount,
