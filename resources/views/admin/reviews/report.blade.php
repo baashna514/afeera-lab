@@ -320,7 +320,7 @@
                             <tr><td class="lbl">Patient ID</td><td>: PID-{{ str_pad($booking->patient->id, 6, '0', STR_PAD_LEFT) }}</td></tr>
                         @endif
                         @if(!$setting || $setting->show_patient_referred_by)
-                            <tr><td class="lbl">Referred By</td><td>: {{ $booking->referred_by ?: ($setting->default_referred_by ?? 'Dr. Consultant Physician') }}</td></tr>
+                            <tr><td class="lbl">Referred By</td><td>: {{ $booking->referred_by ?: ($setting->default_referred_by ?? '--') }}</td></tr>
                         @endif
                         @if(!$setting || $setting->show_patient_contact)
                             <tr><td class="lbl">Contact</td><td>: {{ $booking->patient->phone ?? '--' }}</td></tr>
@@ -333,10 +333,10 @@
                             <tr><td class="lbl">Collection Type</td><td>: {{ $booking->collection_type ?: ($setting->default_collection_type ?? ($booking->items->first()?->sample_type ?? 'Venous Blood')) }}</td></tr>
                         @endif
                         @if(!$setting || $setting->show_patient_fasting)
-                            <tr><td class="lbl">Fasting</td><td>: {{ $booking->fasting ?: ($setting->default_fasting ?? 'No') }}</td></tr>
+                            <tr><td class="lbl">Fasting</td><td>: {{ $booking->fasting ?: ($setting->default_fasting ?? '--') }}</td></tr>
                         @endif
                         @if(!$setting || $setting->show_patient_clinical_info)
-                            <tr><td class="lbl">Clinical Info</td><td>: {{ $booking->clinical_info ?: ($setting->default_clinical_info ?? 'Routine Check-up') }}</td></tr>
+                            <tr><td class="lbl">Clinical Info</td><td>: {{ $booking->clinical_info ?: ($setting->default_clinical_info ?? '--') }}</td></tr>
                         @endif
                         @if(!$setting || $setting->show_patient_barcode)
                             <tr><td class="lbl">Barcode No</td><td>: {{ $booking->items->first()->barcode ?? '--' }}</td></tr>
