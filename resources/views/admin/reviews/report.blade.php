@@ -295,7 +295,7 @@
                             <tr><td class="lbl">Report Date</td><td>: {{ now()->format('d-M-Y h:i A') }}</td></tr>
                         @endif
                         @if(!$setting || $setting->show_header_sample_date)
-                            <tr><td class="lbl">Sample Collected</td><td>: {{ ($booking->items->first()?->collected_at ?? $booking->created_at)->format('d-M-Y h:i A') }}</td></tr>
+                            <tr><td class="lbl">Sample Collected</td><td>: {{ \Carbon\Carbon::parse($booking->items->first()?->collected_at ?? $booking->created_at)->format('d-M-Y h:i A') }}</td></tr>
                         @endif
                         @if(!$setting || $setting->show_header_report_status)
                             <tr><td class="lbl">Report Status</td><td>: {{ ucfirst($booking->status === 'completed' ? 'Final' : $booking->status) }}</td></tr>
@@ -371,7 +371,17 @@
                                     <td class="result-val">{{ $param->result_value ?? '--' }}</td>
                                     <td class="unit">{{ $param->unit ?? '--' }}</td>
                                     <td class="range">{{ $param->normal_range_text ?? '--' }}</td>
-                                    <td class="flag-normal">Normal</td>
+                                    <td class="{{ $param->flag_class }}">
+                                        @if($param->flag === 'Low')
+                                            &darr; Low
+                                        @elseif($param->flag === 'High')
+                                            &uarr; High
+                                        @elseif($param->flag === 'Normal')
+                                            Normal
+                                        @else
+                                            --
+                                        @endif
+                                    </td>
                                 </tr>
                             @endforeach
                         </tbody>

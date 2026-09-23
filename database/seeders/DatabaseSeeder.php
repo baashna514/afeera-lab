@@ -32,7 +32,7 @@ class DatabaseSeeder extends Seeder
         $company = Company::updateOrCreate(
             ['email' => 'info@baashna.com'],
             [
-                'name' => 'Siyaal Surgical Hospital & Labs',
+                'name' => 'Siyaal Surgical Hospital',
                 'phone' => '+92 301 0417383',
                 'address' => 'Near NRSP Bank, FatehPur Road Karor Lal Esan',
                 'status' => 'active',

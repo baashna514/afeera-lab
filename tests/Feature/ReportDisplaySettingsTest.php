@@ -8,6 +8,8 @@ use App\Models\LabTest;
 use App\Models\Patient;
 use App\Models\TestBooking;
 use App\Models\TestBookingItem;
+use App\Models\TestResult;
+use App\Models\TestResultParameter;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
@@ -252,5 +254,101 @@ class ReportDisplaySettingsTest extends TestCase
         $response->assertSee('Dr. Ritu Malhotra');
         // Fasting should NOT be shown because show_patient_fasting = false
         $response->assertDontSee('Fasting');
+    }
+
+    public function test_result_parameter_flags_calculation_and_rendering()
+    {
+        $company = Company::factory()->create();
+        $admin = User::factory()->create(['company_id' => $company->id, 'role' => 'super_admin']);
+
+        $patient = Patient::create([
+            'company_id' => $company->id,
+            'name' => 'Ali Khan',
+            'gender' => 'male',
+        ]);
+
+        $booking = TestBooking::create([
+            'company_id' => $company->id,
+            'patient_id' => $patient->id,
+            'invoice_number' => 'INV-TEST-001',
+            'status' => 'completed',
+        ]);
+
+        $test = LabTest::create([
+            'company_id' => $company->id,
+            'category' => 'Hematology',
+            'name' => 'Complete Blood Count (CBC)',
+            'price' => 1000,
+        ]);
+
+        $item = TestBookingItem::create([
+            'company_id' => $company->id,
+            'test_booking_id' => $booking->id,
+            'lab_test_id' => $test->id,
+            'price' => 1000,
+            'barcode' => 'SMP-001',
+        ]);
+
+        $result = TestResult::create([
+            'company_id' => $company->id,
+            'test_booking_item_id' => $item->id,
+            'status' => 'verified',
+        ]);
+
+        // Parameter 1: Range 4.0 - 11.0, value 3.1 -> Should be LOW
+        $paramLow = TestResultParameter::create([
+            'test_result_id' => $result->id,
+            'parameter_name' => 'WBC',
+            'unit' => '10^3/ul',
+            'normal_range_text' => '4.0 - 11.0',
+            'result_value' => '3.1',
+        ]);
+
+        // Parameter 2: Range 20.0 - 40.0, value 10.5 -> Should be LOW
+        $paramLow2 = TestResultParameter::create([
+            'test_result_id' => $result->id,
+            'parameter_name' => 'Lymphocytes',
+            'unit' => '%',
+            'normal_range_text' => '20.0 - 40.0',
+            'result_value' => '10.5',
+        ]);
+
+        // Parameter 3: Range 4.0 - 11.0, value 7.5 -> Should be NORMAL
+        $paramNormal = TestResultParameter::create([
+            'test_result_id' => $result->id,
+            'parameter_name' => 'Neutrophils',
+            'unit' => '%',
+            'normal_range_text' => '4.0 - 11.0',
+            'result_value' => '7.5',
+        ]);
+
+        // Parameter 4: Range 20.0 - 40.0, value 55.0 -> Should be HIGH
+        $paramHigh = TestResultParameter::create([
+            'test_result_id' => $result->id,
+            'parameter_name' => 'Monocytes',
+            'unit' => '%',
+            'normal_range_text' => '20.0 - 40.0',
+            'result_value' => '55.0',
+        ]);
+
+        // Assert model attributes
+        $this->assertEquals('Low', $paramLow->flag);
+        $this->assertEquals('flag-low', $paramLow->flag_class);
+
+        $this->assertEquals('Low', $paramLow2->flag);
+        $this->assertEquals('flag-low', $paramLow2->flag_class);
+
+        $this->assertEquals('Normal', $paramNormal->flag);
+        $this->assertEquals('flag-normal', $paramNormal->flag_class);
+
+        $this->assertEquals('High', $paramHigh->flag);
+        $this->assertEquals('flag-high', $paramHigh->flag_class);
+
+        // Assert report page renders these flags
+        $response = $this->actingAs($admin)->get(route('admin.reviews.report', $booking));
+        $response->assertStatus(200);
+        $response->assertSee('flag-low');
+        $response->assertSee('flag-high');
+        $response->assertSee('flag-normal');
     }
 }
